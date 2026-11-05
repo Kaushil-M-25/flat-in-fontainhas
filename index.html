@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Flat in Fontainhas — Fair Electricity Bill Division</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       MONOCHROMATIC ARCHITECTURAL WORKING SHEET (GOOGLE SANS CODE)
+       Strictly black, white, and neutral grays with compact spacing
+       ========================================================================== */
+    :root {
+      --bg: #f9fafb;
+      --surface: #ffffff;
+      --surface-subtle: #f4f4f5;
+      --surface-hover: #e4e4e7;
+      --border: #e4e4e7;
+      --border-dark: #27272a;
+      --text: #09090b;
+      --text-muted: #52525b;
+      --text-light: #71717a;
+      --font-sans: 'Google Sans Code', ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #09090b;
+        --surface: #121215;
+        --surface-subtle: #18181b;
+        --surface-hover: #27272a;
+        --border: #27272a;
+        --border-dark: #fafafa;
+        --text: #fafafa;
+        --text-muted: #a1a1aa;
+        --text-light: #71717a;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.5);
+      }
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body,
+    button,
+    input,
+    select,
+    textarea {
+      font-family: var(--font-sans);
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-size: 13.5px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding: 16px 12px 48px;
+    }
+
+    .num {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+      letter-spacing: -0.01em;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-subtle);
+      color: var(--text);
+      border: 1px solid var(--border-dark);
+    }
+
+    .header-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Monochromatic Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 7px 12px;
+      min-height: 34px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-dark);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    .btn:hover {
+      background: var(--surface-subtle);
+      border-color: var(--text);
+    }
+
+    .btn-solid {
+      background: var(--text);
+      color: var(--surface);
+      border-color: var(--text);
+    }
+
+    .btn-solid:hover {
+      background: var(--surface-subtle);
+      color: var(--text);
+      border-color: var(--text);
+    }
+
+    .btn-sm {
+      padding: 3px 8px;
+      font-size: 0.74rem;
+      min-height: 28px;
+    }
+
+    .btn-danger {
+      color: var(--text);
+      border-color: var(--border-dark);
+      background: transparent;
+    }
+
+    .btn-danger:hover {
+      background: var(--surface-hover);
+    }
+
+    .btn-locked {
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-locked:hover {
+      background: var(--surface-hover);
+      color: var(--text);
+      border-color: var(--border-dark);
+    }
+
+    /* Panels with Compact Spacing */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .panel-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Total Bill Display Box */
+    .bill-box-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border-dark);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .bill-box-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      align-items: center;
+    }
+
+    .bill-main-val {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin: 4px 0;
+    }
+
+    .bill-box-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .bill-box-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-left: 14px;
+      border-left: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .bill-box-inputs {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding-left: 0;
+        padding-top: 12px;
+      }
+
+      .bill-main-val {
+        font-size: 1.9rem;
+      }
+    }
+
+    /* Form Fields */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      font-size: 14px;
+      font-variant-numeric: tabular-nums;
+      padding: 6px 10px;
+      min-height: 36px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    input:focus {
+      border-color: var(--border-dark);
+      background: var(--surface-subtle);
+    }
+
+    input:disabled {
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      cursor: not-allowed;
+      border-style: dashed;
+    }
+
+    /* ==========================================================================
+       TABULAR FLATMATES INPUT SECTION (MINIMALIST TOOL)
+       ========================================================================== */
+    .status-badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      background: var(--surface-subtle);
+      color: var(--text);
+    }
+
+    .status-badge.all-done {
+      background: var(--text);
+      color: var(--surface);
+      border-color: var(--text);
+    }
+
+    .portal-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    .portal-table th,
+    .portal-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .portal-table th {
+      text-align: left;
+      background: var(--surface-subtle);
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      letter-spacing: 0.05em;
+    }
+
+    .portal-table th.text-right,
+    .portal-table td.text-right {
+      text-align: right;
+    }
+
+    .portal-table th.text-center,
+    .portal-table td.text-center {
+      text-align: center;
+    }
+
+    .portal-table tbody tr:hover td {
+      background: var(--surface-subtle);
+    }
+
+    .portal-table tbody tr.row-locked td {
+      background: var(--surface-subtle);
+    }
+
+    .table-input-cell {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .input-table {
+      font-size: 13.5px;
+      font-variant-numeric: tabular-nums;
+      padding: 4px 6px;
+      min-height: 30px;
+      text-align: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .input-table:focus {
+      border-color: var(--border-dark);
+      background: var(--surface-subtle);
+    }
+
+    .input-table:disabled {
+      background: transparent;
+      border-color: transparent;
+      color: var(--text-muted);
+      cursor: default;
+      font-weight: 600;
+    }
+
+    .cell-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .cell-sub {
+      font-size: 0.68rem;
+      color: var(--text-light);
+      margin-top: 1px;
+    }
+
+    .cell-amount {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .unit-text {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* All Submitted Action Box */
+    .settlement-complete-box {
+      background: var(--text);
+      color: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .settlement-complete-box .btn {
+      background: var(--surface);
+      color: var(--text);
+      border-color: var(--surface);
+    }
+
+    .settlement-complete-box .btn:hover {
+      background: var(--surface-hover);
+    }
+
+    /* Results Cards Grid */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .person-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .person-name-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .person-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .person-amount {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin: 4px 0;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      padding: 4px 0;
+      border-bottom: 1px dotted var(--border);
+    }
+
+    .breakdown-row:last-child {
+      border-bottom: none;
+    }
+
+    .diff-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 5px 8px;
+      border-radius: var(--radius-sm);
+      margin-top: 10px;
+      text-align: center;
+      justify-content: center;
+      width: 100%;
+      border: 1px solid var(--border-dark);
+      background: var(--surface-subtle);
+    }
+
+    /* Breakdown Pool Cards */
+    .pool-split-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .pool-card {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+    }
+
+    .pool-title {
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .pool-amount {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .pool-desc {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Historical Trend Cards & Mini Bars */
+    .history-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .history-card {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+    }
+
+    .history-card.current {
+      border: 1.5px solid var(--border-dark);
+    }
+
+    .history-month {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    .history-amount {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin: 2px 0;
+    }
+
+    .history-tag {
+      font-size: 0.68rem;
+      color: var(--text-light);
+    }
+
+    .bar-container {
+      height: 44px;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+      padding-top: 6px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 4px;
+    }
+
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .bar-fill {
+      width: 100%;
+      background: var(--border-dark);
+      border-radius: 2px 2px 0 0;
+      opacity: 0.75;
+      transition: height 0.3s ease;
+    }
+
+    .bar-fill.active {
+      opacity: 1;
+      background: var(--text);
+    }
+
+    /* Sub Items & Tables */
+    .sub-item-card {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .sub-item-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .table-compact {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+
+    .table-compact th,
+    .table-compact td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table-compact th {
+      text-align: left;
+      background: var(--surface-subtle);
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    /* Collapsible Details */
+    details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    summary {
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+      background: var(--surface);
+      color: var(--text);
+      min-height: 42px;
+    }
+
+    summary:hover {
+      background: var(--surface-subtle);
+    }
+
+    .details-content {
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-subtle);
+      font-size: 0.8rem;
+    }
+
+    /* Assumptions List (Strictly 3 items) */
+    .assumptions-list {
+      list-style-type: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .assumptions-list li {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .assumptions-list strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 2px;
+      font-size: 0.78rem;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--text);
+      color: var(--surface);
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-md);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-light);
+    }
+
+    .selfcheck-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      margin-bottom: 6px;
+    }
+
+    /* Clean Print */
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+        font-size: 8pt !important;
+        padding: 0 !important;
+      }
+
+      .header-actions,
+      .btn,
+      #toast,
+      footer,
+      .no-print,
+      button {
+        display: none !important;
+      }
+
+      .panel,
+      .bill-box-card {
+        border: 1pt solid #444 !important;
+        padding: 6pt !important;
+        margin-bottom: 6pt !important;
+        box-shadow: none !important;
+      }
+
+      .results-grid {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 4pt !important;
+      }
+
+      .person-card {
+        border: 1pt solid #666 !important;
+        padding: 5pt !important;
+        flex: 1 !important;
+        box-shadow: none !important;
+      }
+
+      .person-amount {
+        font-size: 1.25rem !important;
+        margin: 2pt 0 !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <header>
+      <div class="header-top">
+        <div>
+          <div class="brand-title">
+            <span>⚡ FLAT IN FONTAINHAS</span>
+            <span class="brand-badge">LTDS-II GOA</span>
+          </div>
+          <p class="header-desc">
+            Electricity division for 4 flatmates. Baseline load is shared; AC costs go to room users.
+          </p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-solid" onclick="copyWhatsAppSummary()">
+            📋 Copy for WhatsApp
+          </button>
+          <button class="btn" onclick="window.print()">
+            🖨️ Print
+          </button>
+          <button class="btn" onclick="loadDefaultExample()">
+            ↺ Load Bill
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="confirmResetAll()">
+            Reset
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- TOTAL BILL DISPLAY BOX -->
+    <div class="bill-box-card">
+      <div class="bill-box-grid">
+        <div>
+          <div
+            style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+            Total Printed Bill
+          </div>
+          <div class="bill-main-val num" id="boxPrintedBillTotal">₹5,089.94</div>
+          <div class="bill-box-sub" id="boxUsagePeriodDesc">
+            Usage Period: <strong>Aug 31 – Sep 30</strong> (806.01 kWh)
+          </div>
+        </div>
+
+        <div class="bill-box-inputs">
+          <div class="field">
+            <label>Printed Bill Amount (₹)</label>
+            <input type="number" step="0.01" min="0" id="inputPrintedTotal" value="5089.94"
+              onchange="saveAndRecalculate()">
+          </div>
+          <div class="field">
+            <label>Total Meter Units (kWh)</label>
+            <input type="number" step="0.01" min="0" id="inputTotalUnits" value="806.01"
+              onchange="saveAndRecalculate()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRIMARY TOP SECTION: TABULAR FLATMATE INPUTS & SETTLEMENT -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">
+          1. Flatmate Inputs & Settlement
+        </span>
+        <div id="portalGlobalStatus" class="status-badge">
+          0 of 4 Submitted
+        </div>
+      </div>
+
+      <!-- Minimal Rows & Columns Tabular Form -->
+      <div class="table-wrap">
+        <table class="portal-table">
+          <thead>
+            <tr>
+              <th style="width: 22%;">Flatmate</th>
+              <th style="width: 20%;">Days Present</th>
+              <th style="width: 22%;">Room AC Hours</th>
+              <th style="width: 20%;" class="text-right">Payable Share</th>
+              <th style="width: 16%;" class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody id="portalTableBody">
+            <!-- Injected via JS -->
+          </tbody>
+          <tfoot id="portalTableFoot">
+            <!-- Injected via JS -->
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- All Flatmates Submitted Banner -->
+      <div id="allSubmittedBox" class="settlement-complete-box" style="display: none;">
+        <div style="font-size: 0.82rem; font-weight: 700;">✓ All 4 flatmates confirmed. Settlement ready for month-end.
+        </div>
+        <button class="btn btn-sm" onclick="advanceToNextMonthCycle()">
+          Archive & Advance Month →
+        </button>
+      </div>
+    </div>
+
+    <!-- SUMMARY FLATMATES RESULTS CARDS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <span class="panel-title">2. Calculated Flatmate Payable Summary</span>
+          <span class="panel-subtitle">Incremental model (AC units on top of common load)</span>
+        </div>
+      </div>
+      <div class="results-grid" id="personResultsGrid">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+    <!-- SIMPLE BREAKDOWN OF CHARGES -->
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <span class="panel-title">3. Breakdown of Charges</span>
+          <span class="panel-subtitle">Baseline shared load vs bedroom AC usage</span>
+        </div>
+      </div>
+
+      <!-- The Two Cost Pools -->
+      <div class="pool-split-grid">
+        <div class="pool-card">
+          <div class="pool-title">Common Shared Baseline Pool</div>
+          <div class="pool-amount num" id="lblCommonPool">₹2,547.58</div>
+          <p class="pool-desc">
+            <strong>468.02 kWh</strong> common load & fixed charges.
+            <br>Split equally across 4 flatmates = <strong class="num" id="lblCommonPerPerson">₹636.89 each</strong>.
+          </p>
+        </div>
+        <div class="pool-card">
+          <div class="pool-title">Air Conditioners Pool</div>
+          <div class="pool-amount num" id="lblAcPool">₹2,542.43</div>
+          <p class="pool-desc">
+            <strong>337.99 kWh</strong> bedroom ACs (marginal top slab). Paid only by room users:
+            <br>• Samsung (J & V): <span class="num" id="lblSamsungCost">₹1,480.89</span> <span id="lblSamsungSplitDesc">(₹740.45 each)</span>
+            <br>• Haier (A): <span class="num" id="lblHaierCost">₹1,061.54</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREVIOUS BILLS & SEASONAL TRENDS SECTION -->
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <span class="panel-title">4. Previous Months Recorded Bills</span>
+          <span class="panel-subtitle">Payment history showing monsoon drop vs summer cooling</span>
+        </div>
+      </div>
+
+      <div class="history-grid" id="historyCardsGrid">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Mini Visual Trend Bar Chart -->
+      <div class="bar-container" title="Seasonal Bill Fluctuation">
+        <div class="bar-col">
+          <div class="bar-fill" style="height: 20%;" title="Mar-Apr: ₹1,241"></div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-fill" style="height: 45%;" title="Apr-May: ₹2,802"></div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-fill" style="height: 100%;" title="May-Jun: ₹6,241"></div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-fill" style="height: 28%;" title="Jun-Jul: ₹1,760"></div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-fill" style="height: 69%;" title="Jul-Aug: ₹4,285"></div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-fill active" style="height: 82%;" title="Aug 31-Sep 30: ₹5,090"></div>
+        </div>
+      </div>
+
+      <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 10px;">
+        Monsoon (Jun–Jul, no AC): <strong>₹1,760</strong>. Summer peak (May–Jun AC): <strong>₹6,241</strong>. Reflects
+        flat baseline vs seasonal cooling impact.
+      </div>
+    </div>
+
+    <!-- AIR CONDITIONERS IN FLAT -->
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <span class="panel-title">5. Air Conditioners in Flat</span>
+          <span class="panel-subtitle">Rated watts × hours × duty cycle (70% compressor cycling)</span>
+        </div>
+        <button class="btn btn-sm" onclick="addAC()">+ Add AC</button>
+      </div>
+      <div id="acListContainer">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+    <!-- COMPACT FLATMATES & WEIGHTS SECTION -->
+    <details>
+      <summary>
+        <span>👥 Manage Flatmate List & Presence Weights</span>
+        <span style="font-size: 0.76rem; color: var(--text-light);">Edit Names / Weights</span>
+      </summary>
+      <div class="details-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <span style="font-size: 0.76rem; color: var(--text-muted);">Adjust individual presence weight or add/remove
+            flatmates.</span>
+          <button class="btn btn-sm" onclick="addPerson()">+ Add Flatmate</button>
+        </div>
+        <div id="peopleListContainer">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </details>
+
+    <!-- COMPACT BILL INPUTS & TARIFF SLABS SECTION -->
+    <details>
+      <summary>
+        <span>📋 Detailed Tariff Slabs & Meter Line Items</span>
+        <span style="font-size: 0.76rem; color: var(--text-light);">Goa LTDS-II Slabs & Duties</span>
+      </summary>
+      <div class="details-content">
+        <div
+          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 12px;">
+          <div class="field">
+            <label>Fixed Charge (₹)</label>
+            <input type="number" step="0.01" min="0" id="inputFixedCharge" value="187.00"
+              onchange="saveAndRecalculate()">
+          </div>
+          <div class="field">
+            <label>FPPCA Total (₹)</label>
+            <input type="number" step="0.01" min="0" id="inputFppcaTotal" value="541.84"
+              onchange="saveAndRecalculate()">
+          </div>
+          <div class="field">
+            <label>Electricity Duty</label>
+            <input type="number" step="0.01" min="0" id="inputElecDuty" value="0.20" onchange="saveAndRecalculate()">
+          </div>
+          <div class="field">
+            <label>Public Lighting</label>
+            <input type="number" step="0.01" min="0" id="inputPubDuty" value="0.05" onchange="saveAndRecalculate()">
+          </div>
+          <div class="field">
+            <label>Billing Days</label>
+            <input type="number" step="1" min="1" max="365" id="inputBillingDays" value="30"
+              onchange="saveAndRecalculate()">
+          </div>
+        </div>
+
+        <!-- Compact Tariff Slabs Table -->
+        <div style="margin-top: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <strong style="font-size: 0.74rem; text-transform: uppercase; color: var(--text-muted);">Goa LTDS-II
+              Cumulative Slabs</strong>
+            <button class="btn btn-sm" onclick="resetDefaultSlabs()">Reset Slabs</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table-compact">
+              <thead>
+                <tr>
+                  <th>Slab Range</th>
+                  <th>Upper Units Limit</th>
+                  <th>Rate (₹/kWh)</th>
+                </tr>
+              </thead>
+              <tbody id="slabsTableBody">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- ASSUMPTIONS PANEL (Strictly 3 points) -->
+    <div class="panel">
+      <div class="panel-header" style="margin-bottom: 8px;">
+        <span class="panel-title">📋 Flat Electricity Sharing Assumptions</span>
+      </div>
+      <ul class="assumptions-list">
+        <li>
+          <strong>1. Duty Cycle Estimate</strong>
+          Non-inverter AC compressors cycle ON/OFF at ~70% run-time maintaining 24–25°C in coastal Goa.
+        </li>
+        <li>
+          <strong>2. Self-Reported Hours</strong>
+          Flatmates track and report bedroom AC run-time in good faith each month.
+        </li>
+        <li>
+          <strong>3. Common Load Weighting</strong>
+          Common baseline electricity is split strictly by presence days in the flat (days present / 30).
+        </li>
+      </ul>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div id="engineSelfCheckBadge" class="selfcheck-badge">
+        ⚡ Engine Self-Check: Initializing...
+      </div>
+      <p style="font-weight: 600; color: var(--text-muted);">Flat in Fontainhas • Electricity Division Tool</p>
+      <p style="font-size: 0.7rem; color: var(--text-light); margin-top: 3px;">
+        Built with HTML, CSS and natural prompting through Google Antigravity
+      </p>
+      <p style="font-size: 0.7rem; color: var(--text-light); margin-top: 2px;">
+        &copy; Kaushil 2026. Built in 3.5 hours
+      </p>
+    </footer>
+
+  </div>
+
+  <div id="toast">Copied to clipboard! ✓</div>
+
+  <!-- ==========================================================================
+     VANILLA JAVASCRIPT ENGINE (CLEAN & STREAMLINED)
+     ========================================================================== -->
+  <script>
+    // Default State
+    const DEFAULT_STATE = {
+      billTitle: "October 2026 Bill (For 31 August to 31 September Usage)",
+      usagePeriod: "31 August to 31 September",
+      billMonth: "October 2026",
+      totalUnits: 806.01,
+      billingDays: 30,
+      fixedCharge: 187.00,
+      fppcaTotal: 541.84,
+      electricityDuty: 0.20,
+      publicLightingDuty: 0.05,
+      greenRate: 0.00,
+      otherAdjustments: 0.00,
+      printedTotal: 5089.94,
+      slabs: [
+        { label: "0 – 100", limit: 100, rate: 2.10 },
+        { label: "101 – 200", limit: 100, rate: 3.10 },
+        { label: "201 – 300", limit: 100, rate: 4.15 },
+        { label: "301 – 400", limit: 100, rate: 5.45 },
+        { label: "Above 400", limit: null, rate: 6.60 }
+      ],
+      people: [
+        { id: "p1", name: "K", daysPresent: 30, weight: 1.0, role: "No AC Room", acId: null, acHours: 0 },
+        { id: "p2", name: "J", daysPresent: 30, weight: 1.0, role: "Samsung Room", acId: "ac1", acHours: 158 },
+        { id: "p3", name: "V", daysPresent: 30, weight: 1.0, role: "Samsung Room", acId: "ac1", acHours: 158 },
+        { id: "p4", name: "A", daysPresent: 30, weight: 1.0, role: "Haier Room", acId: "ac2", acHours: 112 }
+      ],
+      acs: [
+        {
+          id: "ac1",
+          name: "Samsung (J+V room)",
+          watts: 1780,
+          hours: 158,
+          dutyCycle: 70,
+          users: { p2: 0.5, p3: 0.5 }
+        },
+        {
+          id: "ac2",
+          name: "Haier (A room)",
+          watts: 1800,
+          hours: 112,
+          dutyCycle: 70,
+          users: { p4: 1.0 }
+        }
+      ],
+      submitted: {
+        p1: false,
+        p2: false,
+        p3: false,
+        p4: false
+      },
+      history: [
+        { period: "Mar – Apr", amount: 1241, tag: "Spring (No AC)" },
+        { period: "Apr – May", amount: 2802, tag: "Early Summer" },
+        { period: "May – Jun", amount: 6241, tag: "Peak Summer AC" },
+        { period: "Jun – Jul", amount: 1760, tag: "Monsoon (AC Off)" },
+        { period: "Jul – Aug", amount: 4285, tag: "Monsoon Break" },
+        { period: "Aug 31 – Sep 30", amount: 5090, tag: "Current Bill", isCurrent: true }
+      ]
+    };
+
+    var state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+
+    // Currency Formatter
+    const inr = new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    });
+
+    const inrPrecise = new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+
+    // Slab Energy Calculator
+    function slabEnergy(u, slabs = state.slabs) {
+      let rem = Math.max(0, u);
+      let totalCost = 0;
+      for (const slab of slabs) {
+        if (rem <= 0) break;
+        const isUnbounded = slab.limit === Infinity || slab.limit === null || slab.limit === undefined || slab.limit === "" || !isFinite(slab.limit) || Number(slab.limit) <= 0;
+        const take = isUnbounded ? rem : Math.min(rem, Number(slab.limit));
+        totalCost += take * slab.rate;
+        rem -= take;
+      }
+      return totalCost;
+    }
+
+    function getPerUnitRate(s = state) {
+      const fppcaRate = s.totalUnits > 0 ? (s.fppcaTotal / s.totalUnits) : 0;
+      return fppcaRate + s.electricityDuty + s.publicLightingDuty + s.greenRate;
+    }
+
+    function calculateBill(u, s = state) {
+      if (u <= 0) return s.fixedCharge + s.otherAdjustments;
+      const energy = slabEnergy(u, s.slabs);
+      const surcharges = u * getPerUnitRate(s);
+      return energy + surcharges + s.fixedCharge + s.otherAdjustments;
+    }
+
+    // Hamilton-Hare Rounding
+    function largestRemainderRound(amounts, targetTotal) {
+      const target = Math.round(targetTotal);
+      const floors = amounts.map(a => Math.floor(Math.max(0, a)));
+      let sumFloor = floors.reduce((acc, v) => acc + v, 0);
+      let diff = target - sumFloor;
+
+      const remainders = amounts.map((a, idx) => ({ idx, rem: a - Math.floor(a) }));
+      remainders.sort((a, b) => b.rem - a.rem || a.idx - b.idx);
+
+      const rounded = [...floors];
+      for (let i = 0; i < diff && i < remainders.length; i++) {
+        rounded[remainders[i].idx] += 1;
+      }
+      return rounded;
+    }
+
+    // Main Calculation
+    function runCalculations(customState = state) {
+      const s = customState;
+      const totalUnits = Math.max(0, Number(s.totalUnits) || 0);
+
+      // 1. AC kWh via duty cycle & individual user hours
+      const acCalculations = s.acs.map(ac => {
+        const duty = (Number(ac.dutyCycle) || 70) / 100;
+        const kw = (Number(ac.watts) || 0) / 1000;
+        const roomUsers = s.people.filter(p => p.acId === ac.id);
+
+        let machineHours = 0;
+        let userFractions = {};
+
+        if (roomUsers.length === 0) {
+          machineHours = Math.max(0, Number(ac.hours) || 0);
+        } else if (roomUsers.length === 1) {
+          const u = roomUsers[0];
+          const h = u.acHours !== undefined ? Number(u.acHours) : Number(ac.hours || 0);
+          machineHours = Math.max(0, h);
+          userFractions[u.id] = 1.0;
+        } else if (roomUsers.length === 2) {
+          const u1 = roomUsers[0];
+          const u2 = roomUsers[1];
+          const h1 = Math.max(0, u1.acHours !== undefined ? Number(u1.acHours) : Number(ac.hours || 0));
+          const h2 = Math.max(0, u2.acHours !== undefined ? Number(u2.acHours) : Number(ac.hours || 0));
+          machineHours = Math.max(h1, h2);
+
+          if (machineHours === 0) {
+            userFractions[u1.id] = 0.5;
+            userFractions[u2.id] = 0.5;
+          } else if (h1 === h2) {
+            userFractions[u1.id] = 0.5;
+            userFractions[u2.id] = 0.5;
+          } else {
+            const joint = Math.min(h1, h2);
+            const solo1 = h1 > h2 ? (h1 - h2) : 0;
+            const solo2 = h2 > h1 ? (h2 - h1) : 0;
+            const eff1 = (joint / 2) + solo1;
+            const eff2 = (joint / 2) + solo2;
+            userFractions[u1.id] = eff1 / machineHours;
+            userFractions[u2.id] = eff2 / machineHours;
+          }
+        } else {
+          const sumH = roomUsers.reduce((sum, u) => sum + Math.max(0, u.acHours !== undefined ? Number(u.acHours) : Number(ac.hours || 0)), 0);
+          machineHours = Math.max(...roomUsers.map(u => Math.max(0, u.acHours !== undefined ? Number(u.acHours) : Number(ac.hours || 0))));
+          roomUsers.forEach(u => {
+            const h = Math.max(0, u.acHours !== undefined ? Number(u.acHours) : Number(ac.hours || 0));
+            userFractions[u.id] = sumH > 0 ? (h / sumH) : (1.0 / roomUsers.length);
+          });
+        }
+
+        const kwh = kw * machineHours * duty;
+        return { ...ac, machineHours, effectiveDuty: duty * 100, kwh, calculatedUsers: userFractions };
+      });
+
+      const totalAcKwh = acCalculations.reduce((sum, a) => sum + a.kwh, 0);
+      const commonKwh = Math.max(0, totalUnits - totalAcKwh);
+
+      // 2. Bill totals
+      const totalBillCalculated = calculateBill(totalUnits, s);
+      const targetBillRounding = s.printedTotal > 0 ? s.printedTotal : totalBillCalculated;
+
+      // 3. Incremental Pools
+      const commonCost = calculateBill(commonKwh, s);
+      const acPool = Math.max(0, totalBillCalculated - commonCost);
+
+      const acCostMap = {};
+      acCalculations.forEach(ac => {
+        const fraction = totalAcKwh > 0 ? (ac.kwh / totalAcKwh) : 0;
+        acCostMap[ac.id] = acPool * fraction;
+      });
+
+      // 4. Flatmates Allocation
+      const sumWeights = s.people.reduce((acc, p) => acc + (Math.max(0, Number(p.weight)) || 0), 0) || 1;
+
+      const personBreakdown = s.people.map(person => {
+        const weight = Math.max(0, Number(person.weight)) || 0;
+        const commonShare = commonCost * (weight / sumWeights);
+
+        let acShare = 0;
+        let acDetails = [];
+
+        acCalculations.forEach(ac => {
+          const userFraction = (ac.calculatedUsers && ac.calculatedUsers[person.id] !== undefined)
+            ? ac.calculatedUsers[person.id]
+            : ((ac.users && ac.users[person.id] !== undefined) ? Number(ac.users[person.id]) : 0);
+
+          if (userFraction > 0) {
+            const cost = (acCostMap[ac.id] || 0) * userFraction;
+            acShare += cost;
+            acDetails.push({
+              acId: ac.id,
+              name: ac.name,
+              fraction: userFraction,
+              kwh: ac.kwh * userFraction,
+              cost
+            });
+          }
+        });
+
+        const rawTotal = commonShare + acShare;
+        return { person, commonShare, acShare, rawTotal, acDetails };
+      });
+
+      const roundedTotals = largestRemainderRound(personBreakdown.map(p => p.rawTotal), targetBillRounding);
+      personBreakdown.forEach((p, idx) => {
+        p.roundedTotal = roundedTotals[idx];
+      });
+
+      const equalSplit = targetBillRounding / Math.max(1, s.people.length);
+
+      return {
+        totalUnits,
+        totalAcKwh,
+        commonKwh,
+        acCalculations,
+        totalBillCalculated,
+        targetBillRounding,
+        commonCost,
+        acPool,
+        acCostMap,
+        personBreakdown,
+        equalSplit
+      };
+    }
+
+    // Render DOM
+    function render() {
+      const calc = runCalculations();
+
+      // 1. Total Bill Box Display
+      document.getElementById("boxPrintedBillTotal").innerText = inrPrecise.format(state.printedTotal);
+      document.getElementById("boxUsagePeriodDesc").innerHTML = `Usage Period: <strong>${escapeHtml(state.usagePeriod)}</strong> (${calc.totalUnits.toFixed(2)} kWh)`;
+
+      // 2. Render Topmost Input & Submit Portal (Tabular Form)
+      renderPortalStation(calc);
+
+      // 3. Render Summary Results Cards
+      renderResultsCards(calc);
+
+      // 4. Breakdown Summary Labels
+      document.getElementById("lblCommonPool").innerText = inrPrecise.format(calc.commonCost);
+      document.getElementById("lblCommonPerPerson").innerText = inrPrecise.format(calc.commonCost / Math.max(1, state.people.length)) + " each";
+      document.getElementById("lblAcPool").innerText = inrPrecise.format(calc.acPool);
+
+      const samsungCost = calc.acCostMap["ac1"] || 0;
+      const haierCost = calc.acCostMap["ac2"] || 0;
+      document.getElementById("lblSamsungCost").innerText = inrPrecise.format(samsungCost);
+      document.getElementById("lblHaierCost").innerText = inrPrecise.format(haierCost);
+
+      const samsungUsers = calc.personBreakdown.filter(p => p.person.acId === "ac1");
+      const splitDescEl = document.getElementById("lblSamsungSplitDesc");
+      if (splitDescEl && samsungUsers.length === 2) {
+        if (Math.round(samsungUsers[0].acShare) === Math.round(samsungUsers[1].acShare)) {
+          splitDescEl.innerText = `(${inrPrecise.format(samsungUsers[0].acShare)} each)`;
+        } else {
+          splitDescEl.innerText = `(${samsungUsers[0].person.name}: ${inr.format(Math.round(samsungUsers[0].acShare))}, ${samsungUsers[1].person.name}: ${inr.format(Math.round(samsungUsers[1].acShare))})`;
+        }
+      }
+
+      // 5. History Cards
+      renderHistoryCards();
+
+      // 6. AC List
+      renderAcList(calc);
+
+      // 7. People List
+      renderPeopleList();
+
+      // 8. Slabs Table
+      renderSlabsTable();
+    }
+
+    // Render Topmost Input & Submit Portal (Minimalist Tabular Tool)
+    function renderPortalStation(calc) {
+      const tbody = document.getElementById("portalTableBody");
+      const tfoot = document.getElementById("portalTableFoot");
+      const statusEl = document.getElementById("portalGlobalStatus");
+      const allSubmittedBox = document.getElementById("allSubmittedBox");
+
+      let submittedCount = 0;
+      let rowsHtml = "";
+      let totalAcHoursLogged = 0;
+
+      calc.personBreakdown.forEach(item => {
+        const p = item.person;
+        const isSubmitted = !!(state.submitted && state.submitted[p.id]);
+        if (isSubmitted) submittedCount++;
+
+        const acDetail = item.acDetails[0] || null;
+        const ac = acDetail ? calc.acCalculations.find(a => a.id === acDetail.acId) : null;
+        const userAcHours = p.acHours !== undefined ? p.acHours : (ac ? ac.hours : 0);
+        if (ac) totalAcHoursLogged += userAcHours;
+
+        const days = p.daysPresent !== undefined ? p.daysPresent : Math.round((p.weight || 1.0) * state.billingDays);
+
+        let acCellHtml = "";
+        if (ac) {
+          const roomUsers = state.people.filter(u => u.acId === ac.id);
+          let subtext = "";
+          if (roomUsers.length > 1) {
+            const other = roomUsers.find(u => u.id !== p.id);
+            const otherH = other ? (other.acHours !== undefined ? Number(other.acHours) : Number(ac.hours)) : userAcHours;
+            if (userAcHours === otherH) {
+              subtext = `${escapeHtml(ac.name.split(' ')[0])} (50% equal)`;
+            } else if (userAcHours > otherH) {
+              const solo = userAcHours - otherH;
+              subtext = `${escapeHtml(ac.name.split(' ')[0])} (${Math.round(acDetail.fraction * 100)}% • ${solo}h solo)`;
+            } else {
+              subtext = `${escapeHtml(ac.name.split(' ')[0])} (${Math.round(acDetail.fraction * 100)}% • ${userAcHours}h joint)`;
+            }
+          } else {
+            subtext = `${escapeHtml(ac.name.split(' ')[0])} (100% room)`;
+          }
+
+          acCellHtml = `
+            <div class="table-input-cell">
+              <input type="number" min="0" max="${state.billingDays * 24}" step="1" 
+                value="${userAcHours}" class="input-table" style="width: 65px;"
+                ${isSubmitted ? 'disabled' : ''} 
+                onchange="updatePersonAcHours('${p.id}', Number(this.value))">
+              <span class="unit-text">hrs</span>
+            </div>
+            <div class="cell-sub">${subtext}</div>
+          `;
+        } else {
+          acCellHtml = `<span class="unit-text" style="color: var(--text-light);">— (No AC)</span>`;
+        }
+
+        const actionBtnHtml = isSubmitted
+          ? `<button class="btn btn-sm btn-locked" onclick="togglePortalSubmit('${p.id}')" title="Click to unlock inputs">✓ Locked</button>`
+          : `<button class="btn btn-sm btn-solid" onclick="togglePortalSubmit('${p.id}')">Submit</button>`;
+
+        rowsHtml += `
+      <tr class="${isSubmitted ? 'row-locked' : ''}">
+        <td>
+          <div class="cell-name">${escapeHtml(p.name)}</div>
+          <div class="cell-sub">${escapeHtml(p.role || '')}</div>
+        </td>
+        <td>
+          <div class="table-input-cell">
+            <input type="number" min="0" max="${state.billingDays}" step="1" 
+              value="${days}" class="input-table" style="width: 55px;"
+              ${isSubmitted ? 'disabled' : ''} 
+              onchange="updatePortalPresence('${p.id}', Number(this.value))">
+            <span class="unit-text">/ ${state.billingDays}d</span>
+          </div>
+        </td>
+        <td>
+          ${acCellHtml}
+        </td>
+        <td class="text-right">
+          <div class="num cell-amount">${inr.format(item.roundedTotal)}</div>
+          <div class="cell-sub num">${inr.format(Math.round(item.commonShare))} + ${inr.format(Math.round(item.acShare))}</div>
+        </td>
+        <td class="text-center">
+          ${actionBtnHtml}
+        </td>
+      </tr>
+    `;
+      });
+
+      if (tbody) tbody.innerHTML = rowsHtml;
+
+      const totalPeople = state.people.length;
+      const totalSettled = calc.personBreakdown.reduce((sum, item) => sum + item.roundedTotal, 0);
+
+      if (tfoot) {
+        tfoot.innerHTML = `
+      <tr style="border-top: 2px solid var(--border-dark); font-weight: 700; background: var(--surface-subtle);">
+        <td>Total</td>
+        <td class="cell-sub num" style="font-size: 0.74rem;">Avg ${state.billingDays}d</td>
+        <td class="cell-sub num" style="font-size: 0.74rem;">${totalAcHoursLogged.toFixed(0)} user-hrs</td>
+        <td class="text-right num cell-amount" style="font-size: 1.15rem;">${inr.format(totalSettled)}</td>
+        <td class="text-center cell-sub" style="font-size: 0.72rem; font-weight: 700;">
+          ${submittedCount}/${totalPeople} Locked
+        </td>
+      </tr>
+    `;
+      }
+
+      if (statusEl) {
+        statusEl.innerHTML = submittedCount === totalPeople
+          ? `✓ All ${totalPeople} Submitted`
+          : `${submittedCount} of ${totalPeople} Submitted`;
+        if (submittedCount === totalPeople && totalPeople > 0) {
+          statusEl.classList.add("all-done");
+        } else {
+          statusEl.classList.remove("all-done");
+        }
+      }
+
+      if (allSubmittedBox) {
+        allSubmittedBox.style.display = (submittedCount === totalPeople && totalPeople > 0) ? 'flex' : 'none';
+      }
+    }
+
+    // Top Portal Actions
+    function updatePortalPresence(personId, days) {
+      const p = state.people.find(item => item.id === personId);
+      if (!p) return;
+      const daysClamped = Math.max(0, Math.min(state.billingDays, Number(days) || 0));
+      p.daysPresent = daysClamped;
+      p.weight = state.billingDays > 0 ? (daysClamped / state.billingDays) : 1.0;
+      saveAndRecalculate();
+    }
+
+    function updatePersonAcHours(personId, hours) {
+      const p = state.people.find(item => item.id === personId);
+      if (!p) return;
+      p.acHours = Math.max(0, Number(hours) || 0);
+
+      // Sync the parent AC machine hours to the max of room occupants
+      if (p.acId) {
+        const ac = state.acs.find(a => a.id === p.acId);
+        if (ac) {
+          const roomUsers = state.people.filter(u => u.acId === ac.id);
+          const maxH = Math.max(...roomUsers.map(u => (u.acHours !== undefined ? Number(u.acHours) : Number(ac.hours || 0))));
+          ac.hours = maxH;
+        }
+      }
+
+      saveAndRecalculate();
+    }
+
+    function updatePortalAcHours(acId, hours) {
+      const ac = state.acs.find(a => a.id === acId);
+      if (!ac) return;
+      const h = Math.max(0, Number(hours) || 0);
+      ac.hours = h;
+      const roomUsers = state.people.filter(u => u.acId === acId);
+      roomUsers.forEach(u => { u.acHours = h; });
+      saveAndRecalculate();
+    }
+
+    function togglePortalSubmit(personId) {
+      if (!state.submitted) state.submitted = {};
+      const current = !!state.submitted[personId];
+      const p = state.people.find(item => item.id === personId);
+      const name = p ? p.name : personId;
+
+      if (current) {
+        if (confirm(`Unlock inputs for ${name}? You can update your presence or AC hours.`)) {
+          state.submitted[personId] = false;
+          showToast(`Unlocked inputs for ${name}`);
+          saveAndRecalculate();
+        }
+      } else {
+        state.submitted[personId] = true;
+        showToast(`✓ Submitted & verified for ${name}!`);
+        saveAndRecalculate();
+      }
+    }
+
+    // Auto-Reset / Rollover when all 4 submit
+    function advanceToNextMonthCycle() {
+      if (!confirm(`Finalize this bill and start next month's cycle?`)) return;
+
+      // Add current bill to history if not duplicate
+      const currentRecord = {
+        period: state.usagePeriod,
+        amount: Math.round(state.printedTotal),
+        tag: "Settled Bill"
+      };
+      state.history.unshift(currentRecord);
+
+      // Advance usage period & bill month
+      if (state.usagePeriod.includes("August") || state.usagePeriod.includes("Aug")) {
+        state.usagePeriod = "30 September to 31 October";
+        state.billMonth = "November 2026";
+        state.billTitle = "November 2026 Bill (For 30 September to 31 October Usage)";
+      } else if (state.usagePeriod.includes("September") || state.usagePeriod.includes("Sep")) {
+        state.usagePeriod = "31 October to 30 November";
+        state.billMonth = "December 2026";
+        state.billTitle = "December 2026 Bill (For 31 October to 30 November Usage)";
+      } else {
+        state.usagePeriod = "Next Month (31st to 31st)";
+        state.billMonth = "Next Month Bill";
+      }
+
+      // Reset submissions and unlock for everyone
+      state.people.forEach(p => {
+        state.submitted[p.id] = false;
+        p.daysPresent = state.billingDays;
+        p.weight = 1.0;
+        p.acHours = 0;
+      });
+
+      // Reset AC hours to 0 for fresh monthly recording
+      state.acs.forEach(ac => {
+        ac.hours = 0;
+      });
+
+      showToast(`Reset & advanced to ${state.usagePeriod}! Ready for fresh entries.`);
+      saveAndRecalculate();
+    }
+
+    function renderResultsCards(calc) {
+      const grid = document.getElementById("personResultsGrid");
+      let gridHtml = "";
+
+      calc.personBreakdown.forEach(item => {
+        const diffVsEqual = item.roundedTotal - Math.round(calc.equalSplit);
+        const isLess = diffVsEqual < 0;
+        const badgeText = isLess
+          ? `-${inr.format(Math.abs(diffVsEqual))} vs equal split`
+          : (diffVsEqual > 0 ? `+${inr.format(diffVsEqual)} vs equal split` : "Equal to 4-way split");
+
+        let acDesc = "";
+        if (item.acDetails.length > 0) {
+          acDesc = item.acDetails.map(d => `${escapeHtml(d.name)}: ${(d.fraction * 100).toFixed(0)}% (${d.kwh.toFixed(1)} kWh)`).join("<br>");
+        } else {
+          acDesc = "No AC in room (Common baseline only)";
+        }
+
+        gridHtml += `
+      <div class="person-card">
+        <div>
+          <div class="person-name-row">
+            <span class="person-name">${escapeHtml(item.person.name)}</span>
+            <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">${((item.roundedTotal / calc.targetBillRounding) * 100).toFixed(1)}% of bill</span>
+          </div>
+          <div class="person-amount num">${inr.format(item.roundedTotal)}</div>
+          <div style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 8px; min-height: 24px;">
+            ${acDesc}
+          </div>
+          <div class="breakdown-row">
+            <span>Common baseline</span>
+            <span class="num">${inrPrecise.format(item.commonShare)}</span>
+          </div>
+          <div class="breakdown-row">
+            <span>AC run-time share</span>
+            <span class="num">${inrPrecise.format(item.acShare)}</span>
+          </div>
+        </div>
+        <div>
+          <div class="diff-badge">
+            ${badgeText}
+          </div>
+        </div>
+      </div>
+    `;
+      });
+      grid.innerHTML = gridHtml;
+    }
+
+    function renderHistoryCards() {
+      const container = document.getElementById("historyCardsGrid");
+      let html = "";
+      (state.history || []).slice(0, 6).forEach(h => {
+        html += `
+      <div class="history-card ${h.isCurrent ? 'current' : ''}">
+        <div class="history-month">${escapeHtml(h.period)}</div>
+        <div class="history-amount num">${inr.format(h.amount)}</div>
+        <div class="history-tag">${escapeHtml(h.tag || '')}</div>
+      </div>
+    `;
+      });
+      container.innerHTML = html;
+    }
+
+    function renderAcList(calc) {
+      const container = document.getElementById("acListContainer");
+      const maxHours = (Number(state.billingDays) || 30) * 24;
+
+      let html = "";
+      state.acs.forEach(ac => {
+        const acCalc = calc.acCalculations.find(a => a.id === ac.id) || ac;
+        html += `
+      <div class="sub-item-card">
+        <div class="sub-item-row">
+          <div class="field" style="flex: 2; min-width: 150px;">
+            <label>AC Label</label>
+            <input type="text" value="${escapeHtml(ac.name)}" onchange="updateAcProp('${ac.id}', 'name', this.value)">
+          </div>
+          <div class="field" style="flex: 1; min-width: 80px;">
+            <label>Watts</label>
+            <input type="number" step="10" min="100" value="${ac.watts}" onchange="updateAcProp('${ac.id}', 'watts', Number(this.value))">
+          </div>
+          <div class="field" style="flex: 1; min-width: 80px;">
+            <label>Hours</label>
+            <input type="number" step="1" min="0" max="${maxHours}" value="${ac.hours}" onchange="updateAcProp('${ac.id}', 'hours', Number(this.value))">
+          </div>
+          <div class="field" style="flex: 1; min-width: 85px;">
+            <label>Duty Cycle %</label>
+            <input type="number" step="1" min="10" max="100" value="${ac.dutyCycle}" onchange="updateAcProp('${ac.id}', 'dutyCycle', Number(this.value))">
+          </div>
+          <div class="field" style="flex: 1; min-width: 80px;">
+            <label>Calculated</label>
+            <div class="num" style="font-weight: 800; padding: 8px 0;">
+              ${acCalc.kwh ? acCalc.kwh.toFixed(1) : 0} kWh
+            </div>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="removeAC('${ac.id}')" title="Delete AC">✕</button>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border);">
+          <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); align-self: center;">Assigned Users:</span>
+          ${state.people.map(person => {
+          const isAssigned = ac.users && ac.users[person.id] !== undefined && ac.users[person.id] > 0;
+          const fraction = isAssigned ? (ac.users[person.id] * 100).toFixed(0) : 0;
+          return `
+              <label style="display: inline-flex; align-items: center; gap: 4px; background: var(--surface); border: 1px solid var(--border); padding: 3px 6px; border-radius: var(--radius-sm); font-size: 0.74rem;">
+                <input type="checkbox" ${isAssigned ? 'checked' : ''} onchange="toggleAcUser('${ac.id}', '${person.id}', this.checked)">
+                <span>${escapeHtml(person.name)}</span>
+                ${isAssigned ? `
+                  <input type="number" min="1" max="100" value="${fraction}" style="width: 44px; padding: 2px 4px; min-height: 24px; text-align: right;" onchange="setAcUserSharePct('${ac.id}', '${person.id}', Number(this.value))">%
+                ` : ''}
+              </label>
+            `;
+        }).join('')}
+          <button class="btn btn-sm" style="margin-left: auto; padding: 2px 6px; min-height: 26px;" onclick="autoEqualizeAcUsers('${ac.id}')">Equal Split</button>
+        </div>
+      </div>
+    `;
+      });
+      container.innerHTML = html;
+    }
+
+    function renderPeopleList() {
+      const container = document.getElementById("peopleListContainer");
+      const sumWeights = state.people.reduce((acc, p) => acc + (Math.max(0, Number(p.weight)) || 0), 0) || 1;
+
+      let html = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px;">`;
+      state.people.forEach(p => {
+        const sharePct = ((Math.max(0, p.weight) / sumWeights) * 100).toFixed(1);
+        html += `
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; display: flex; align-items: center; gap: 6px;">
+        <input type="text" value="${escapeHtml(p.name)}" style="flex: 2; padding: 4px 6px; min-height: 32px;" onchange="updatePersonProp('${p.id}', 'name', this.value)">
+        <input type="number" step="0.1" min="0" max="2" value="${p.weight}" title="Presence weight" style="flex: 1.2; padding: 4px 6px; min-height: 32px; width: 55px;" onchange="updatePersonProp('${p.id}', 'weight', Number(this.value))">
+        <span style="font-size: 0.7rem; color: var(--text-light);">${sharePct}%</span>
+        <button class="btn btn-danger btn-sm" style="padding: 2px 5px; min-height: 26px;" onclick="removePerson('${p.id}')" ${state.people.length <= 1 ? 'disabled' : ''}>✕</button>
+      </div>
+    `;
+      });
+      html += `</div>`;
+      container.innerHTML = html;
+    }
+
+    function renderSlabsTable() {
+      const tbody = document.getElementById("slabsTableBody");
+      let html = "";
+      state.slabs.forEach((slab, idx) => {
+        const isUnbounded = slab.limit === Infinity || slab.limit === null || slab.limit === undefined || slab.limit === "" || !isFinite(slab.limit) || Number(slab.limit) <= 0;
+        html += `
+      <tr>
+        <td><strong>${escapeHtml(slab.label)}</strong></td>
+        <td>
+          <input type="number" step="1" min="1" value="${isUnbounded ? '' : slab.limit}" placeholder="Above 400" onchange="updateSlabLimit(${idx}, this.value)" style="width: 85px; padding: 3px 6px; min-height: 28px;">
+        </td>
+        <td>
+          <input type="number" step="0.05" min="0" value="${slab.rate}" onchange="updateSlabRate(${idx}, Number(this.value))" style="width: 85px; padding: 3px 6px; min-height: 28px;">
+        </td>
+      </tr>
+    `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    // State Mutation Actions
+    function updateAcProp(acId, prop, val) {
+      const ac = state.acs.find(a => a.id === acId);
+      if (ac) {
+        ac[prop] = val;
+        saveAndRecalculate();
+      }
+    }
+
+    function toggleAcUser(acId, personId, checked) {
+      const ac = state.acs.find(a => a.id === acId);
+      if (!ac) return;
+      if (!ac.users) ac.users = {};
+      if (checked) ac.users[personId] = 0.5;
+      else delete ac.users[personId];
+      autoEqualizeAcUsers(acId);
+    }
+
+    function setAcUserSharePct(acId, personId, pct) {
+      const ac = state.acs.find(a => a.id === acId);
+      if (!ac || !ac.users) return;
+      ac.users[personId] = Math.max(0, pct) / 100;
+      saveAndRecalculate();
+    }
+
+    function autoEqualizeAcUsers(acId) {
+      const ac = state.acs.find(a => a.id === acId);
+      if (!ac || !ac.users) return;
+      const userIds = Object.keys(ac.users);
+      if (userIds.length === 0) {
+        saveAndRecalculate();
+        return;
+      }
+      const fraction = 1.0 / userIds.length;
+      userIds.forEach(uid => { ac.users[uid] = fraction; });
+      saveAndRecalculate();
+    }
+
+    function addAC() {
+      state.acs.push({
+        id: "ac_" + Date.now(),
+        name: "New AC",
+        watts: 1500,
+        hours: 100,
+        dutyCycle: 70,
+        users: state.people[0] ? { [state.people[0].id]: 1.0 } : {}
+      });
+      saveAndRecalculate();
+    }
+
+    function removeAC(acId) {
+      if (state.acs.length <= 1) {
+        alert("At least one AC must remain.");
+        return;
+      }
+      state.acs = state.acs.filter(a => a.id !== acId);
+      saveAndRecalculate();
+    }
+
+    function updatePersonProp(personId, prop, val) {
+      const p = state.people.find(item => item.id === personId);
+      if (p) {
+        p[prop] = val;
+        if (prop === 'weight') {
+          p.daysPresent = Math.round(Number(val) * state.billingDays);
+        }
+        saveAndRecalculate();
+      }
+    }
+
+    function addPerson() {
+      const newId = "p_" + Date.now();
+      state.people.push({
+        id: newId,
+        name: "Flatmate " + (state.people.length + 1),
+        daysPresent: state.billingDays,
+        weight: 1.0,
+        role: "Room",
+        acId: null
+      });
+      if (!state.submitted) state.submitted = {};
+      state.submitted[newId] = false;
+      saveAndRecalculate();
+    }
+
+    function removePerson(personId) {
+      if (state.people.length <= 1) {
+        alert("At least one flatmate must remain.");
+        return;
+      }
+      state.people = state.people.filter(p => p.id !== personId);
+      if (state.submitted) delete state.submitted[personId];
+      state.acs.forEach(ac => {
+        if (ac.users && ac.users[personId]) {
+          delete ac.users[personId];
+          autoEqualizeAcUsers(ac.id);
+        }
+      });
+      saveAndRecalculate();
+    }
+
+    function updateSlabLimit(idx, val) {
+      state.slabs[idx].limit = val === "" || isNaN(val) ? null : Number(val);
+      saveAndRecalculate();
+    }
+
+    function updateSlabRate(idx, val) {
+      state.slabs[idx].rate = Math.max(0, Number(val));
+      saveAndRecalculate();
+    }
+
+    function resetDefaultSlabs() {
+      state.slabs = JSON.parse(JSON.stringify(DEFAULT_STATE.slabs));
+      saveAndRecalculate();
+    }
+
+    // Sync Form Inputs
+    function syncFormInputsToState() {
+      state.printedTotal = Math.max(0, Number(document.getElementById("inputPrintedTotal").value) || 0);
+      state.totalUnits = Math.max(0, Number(document.getElementById("inputTotalUnits").value) || 0);
+      state.fixedCharge = Math.max(0, Number(document.getElementById("inputFixedCharge").value) || 0);
+      state.fppcaTotal = Math.max(0, Number(document.getElementById("inputFppcaTotal").value) || 0);
+      state.electricityDuty = Math.max(0, Number(document.getElementById("inputElecDuty").value) || 0);
+      state.publicLightingDuty = Math.max(0, Number(document.getElementById("inputPubDuty").value) || 0);
+      state.billingDays = Math.max(1, Number(document.getElementById("inputBillingDays").value) || 30);
+    }
+
+    function syncStateToFormInputs() {
+      document.getElementById("inputPrintedTotal").value = state.printedTotal;
+      document.getElementById("inputTotalUnits").value = state.totalUnits;
+      document.getElementById("inputFixedCharge").value = state.fixedCharge;
+      document.getElementById("inputFppcaTotal").value = state.fppcaTotal;
+      document.getElementById("inputElecDuty").value = state.electricityDuty;
+      document.getElementById("inputPubDuty").value = state.publicLightingDuty;
+      document.getElementById("inputBillingDays").value = state.billingDays;
+    }
+
+    function saveAndRecalculate() {
+      syncFormInputsToState();
+      try {
+        localStorage.setItem("fontainhasBillStateMono", JSON.stringify(state));
+      } catch (e) {
+        console.warn("localStorage unavailable", e);
+      }
+      render();
+    }
+
+    function loadDefaultExample() {
+      state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      syncStateToFormInputs();
+      saveAndRecalculate();
+      showToast("Loaded current bill details!");
+      runConsoleSelfCheck();
+    }
+
+    function confirmResetAll() {
+      if (confirm("Reset inputs to default values?")) {
+        loadDefaultExample();
+      }
+    }
+
+    // WhatsApp Copy
+    function copyWhatsAppSummary() {
+      const calc = runCalculations();
+      let text = `⚡ *Electricity Bill Split — ${state.billMonth}*\n`;
+      text += `🏢 *Flat in Fontainhas, Goa* (Tariff LTDS-II)\n`;
+      text += `📅 Usage Period: *${state.usagePeriod}*\n`;
+      text += `📊 Total Bill: *${inr.format(state.printedTotal)}* (${calc.totalUnits.toFixed(2)} kWh)\n\n`;
+      text += `*Flatmate Payable Breakdown:*\n`;
+
+      calc.personBreakdown.forEach(item => {
+        text += `• *${item.person.name}*: *${inr.format(item.roundedTotal)}* (Common: ${inr.format(Math.round(item.commonShare))} | AC: ${inr.format(Math.round(item.acShare))})\n`;
+      });
+
+      text += `--------------------------------\n`;
+      const settledTotal = calc.personBreakdown.reduce((s, p) => s + p.roundedTotal, 0);
+      text += `*Total Settled: ${inr.format(settledTotal)}*\n\n`;
+      text += `ℹ️ _Note: AC costs are billed only to room occupants based on 70% duty cycle and reported hours. Common load is shared by presence._`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast("WhatsApp summary copied! 📋");
+        }).catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showToast("WhatsApp summary copied! 📋");
+      } catch (err) {
+        alert("Please copy summary from screen.");
+      }
+      document.body.removeChild(ta);
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.innerText = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2200);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      })[m]);
+    }
+
+    // Engine Console Self-Check
+    function runConsoleSelfCheck() {
+      const testState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      const calc = runCalculations(testState);
+
+      const tests = [
+        { name: "Samsung AC (~197 kWh)", expected: 196.868, actual: calc.acCalculations[0].kwh, tol: 1.0 },
+        { name: "Haier AC (~141 kWh)", expected: 141.120, actual: calc.acCalculations[1].kwh, tol: 1.0 },
+        { name: "Common Baseline (~468 kWh)", expected: 468.022, actual: calc.commonKwh, tol: 1.0 },
+        { name: "Common Cost (~₹2547)", expected: 2547.58, actual: calc.commonCost, tol: 2.0 },
+        { name: "K Total (~₹637)", expected: 637, actual: calc.personBreakdown[0].roundedTotal, tol: 2.0 },
+        { name: "J Total (~₹1377)", expected: 1377, actual: calc.personBreakdown[1].roundedTotal, tol: 2.0 },
+        { name: "V Total (~₹1377)", expected: 1377, actual: calc.personBreakdown[2].roundedTotal, tol: 2.0 },
+        { name: "A Total (~₹1698)", expected: 1698, actual: calc.personBreakdown[3].roundedTotal, tol: 2.0 }
+      ];
+
+      let allPassed = true;
+      const tableData = tests.map(t => {
+        const diff = Math.abs(t.actual - t.expected);
+        const pass = diff <= t.tol;
+        if (!pass) allPassed = false;
+        return {
+          "Check": t.name,
+          "Expected": typeof t.expected === 'number' ? t.expected.toFixed(2) : t.expected,
+          "Calculated": typeof t.actual === 'number' ? t.actual.toFixed(2) : t.actual,
+          "Diff": diff.toFixed(2),
+          "Status": pass ? "✓ PASS" : "✕ FAIL"
+        };
+      });
+
+      console.group("⚡ Goa Fontainhas Bill Division Engine Acceptance Self-Check");
+      console.table(tableData);
+      if (allPassed) {
+        console.log("%c✓ ALL ACCEPTANCE CHECKS PASSED (Tolerance ±₹2)", "font-weight: bold; font-size: 13px;");
+      }
+      console.groupEnd();
+
+      const badge = document.getElementById("engineSelfCheckBadge");
+      if (badge) {
+        badge.innerHTML = allPassed
+          ? `✓ Engine Self-Check: 8/8 Acceptance Tests Passed`
+          : `⚠️ Check Discrepancy Detected`;
+      }
+    }
+
+    // Init
+    window.addEventListener("DOMContentLoaded", () => {
+      try {
+        const saved = localStorage.getItem("fontainhasBillStateMono") || localStorage.getItem("eDiasBillStateMono");
+        if (saved) {
+          state = { ...DEFAULT_STATE, ...JSON.parse(saved) };
+          state.people.forEach(p => {
+            if (p.acHours === undefined) {
+              const ac = state.acs.find(a => a.id === p.acId);
+              p.acHours = ac ? ac.hours : 0;
+            }
+          });
+        }
+      } catch (e) {
+        console.warn("Could not load from localStorage", e);
+      }
+      syncStateToFormInputs();
+      render();
+      runConsoleSelfCheck();
+    });
+  </script>
+</body>
+
+</html>
