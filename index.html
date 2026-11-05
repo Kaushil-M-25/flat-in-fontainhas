@@ -1063,11 +1063,11 @@
         </div>
         <div class="pool-card">
           <div class="pool-title">Air Conditioners Pool</div>
-          <div class="pool-amount num" id="lblAcPool">₹2,542.43</div>
+          <div class="pool-amount num" id="lblAcPool">₹2,684.60</div>
           <p class="pool-desc">
-            <strong>337.99 kWh</strong> bedroom ACs (marginal top slab). Paid only by room users:
+            <strong>356.89 kWh</strong> bedroom ACs (marginal top slab). Paid only by room users:
             <br>• Samsung (J & V): <span class="num" id="lblSamsungCost">₹1,480.89</span> <span id="lblSamsungSplitDesc">(₹740.45 each)</span>
-            <br>• Haier (A): <span class="num" id="lblHaierCost">₹1,061.54</span>
+            <br>• Haier (A): <span class="num" id="lblHaierCost">₹1,203.71</span>
           </p>
         </div>
       </div>
@@ -1300,7 +1300,7 @@
         { id: "p1", name: "K", daysPresent: 30, weight: 1.0, role: "No AC Room", acId: null, acHours: 0 },
         { id: "p2", name: "J", daysPresent: 30, weight: 1.0, role: "Samsung Room", acId: "ac1", acHours: 158 },
         { id: "p3", name: "V", daysPresent: 30, weight: 1.0, role: "Samsung Room", acId: "ac1", acHours: 158 },
-        { id: "p4", name: "A", daysPresent: 30, weight: 1.0, role: "Haier Room", acId: "ac2", acHours: 112 }
+        { id: "p4", name: "A", daysPresent: 30, weight: 1.0, role: "Haier Room", acId: "ac2", acHours: 127 }
       ],
       acs: [
         {
@@ -1315,7 +1315,7 @@
           id: "ac2",
           name: "Haier (A room)",
           watts: 1800,
-          hours: 112,
+          hours: 127,
           dutyCycle: 70,
           users: { p4: 1.0 }
         }
@@ -2095,9 +2095,9 @@
     function saveAndRecalculate() {
       syncFormInputsToState();
       try {
-        localStorage.setItem("fontainhasBillStateMono", JSON.stringify(state));
+        sessionStorage.setItem("fontainhasBillStateSession", JSON.stringify(state));
       } catch (e) {
-        console.warn("localStorage unavailable", e);
+        console.warn("sessionStorage unavailable", e);
       }
       render();
     }
@@ -2422,13 +2422,13 @@
 
       const tests = [
         { name: "Samsung AC (~197 kWh)", expected: 196.868, actual: calc.acCalculations[0].kwh, tol: 1.0 },
-        { name: "Haier AC (~141 kWh)", expected: 141.120, actual: calc.acCalculations[1].kwh, tol: 1.0 },
-        { name: "Common Baseline (~468 kWh)", expected: 468.022, actual: calc.commonKwh, tol: 1.0 },
-        { name: "Common Cost (~₹2547)", expected: 2547.58, actual: calc.commonCost, tol: 2.0 },
-        { name: "K Total (~₹637)", expected: 637, actual: calc.personBreakdown[0].roundedTotal, tol: 2.0 },
-        { name: "J Total (~₹1377)", expected: 1377, actual: calc.personBreakdown[1].roundedTotal, tol: 2.0 },
-        { name: "V Total (~₹1377)", expected: 1377, actual: calc.personBreakdown[2].roundedTotal, tol: 2.0 },
-        { name: "A Total (~₹1698)", expected: 1698, actual: calc.personBreakdown[3].roundedTotal, tol: 2.0 }
+        { name: "Haier AC (~160 kWh)", expected: 160.020, actual: calc.acCalculations[1].kwh, tol: 1.0 },
+        { name: "Common Baseline (~449 kWh)", expected: 449.122, actual: calc.commonKwh, tol: 1.0 },
+        { name: "Common Cost (~₹2405)", expected: 2405.41, actual: calc.commonCost, tol: 2.0 },
+        { name: "K Total (~₹601)", expected: 601, actual: calc.personBreakdown[0].roundedTotal, tol: 2.0 },
+        { name: "J Total (~₹1342)", expected: 1342, actual: calc.personBreakdown[1].roundedTotal, tol: 2.0 },
+        { name: "V Total (~₹1342)", expected: 1342, actual: calc.personBreakdown[2].roundedTotal, tol: 2.0 },
+        { name: "A Total (~₹1805)", expected: 1805, actual: calc.personBreakdown[3].roundedTotal, tol: 2.0 }
       ];
 
       let allPassed = true;
@@ -2463,7 +2463,11 @@
     // Init
     window.addEventListener("DOMContentLoaded", () => {
       try {
-        const saved = localStorage.getItem("fontainhasBillStateMono") || localStorage.getItem("eDiasBillStateMono");
+        // Purge any old localStorage so obsolete 112h is cleanly removed
+        localStorage.removeItem("fontainhasBillStateMono");
+        localStorage.removeItem("eDiasBillStateMono");
+
+        const saved = sessionStorage.getItem("fontainhasBillStateSession");
         if (saved) {
           state = { ...DEFAULT_STATE, ...JSON.parse(saved) };
           state.people.forEach(p => {
@@ -2472,9 +2476,13 @@
               p.acHours = ac ? ac.hours : 0;
             }
           });
+        } else {
+          // Fresh open: start with canonical defaults (J:158h, V:158h, A:127h)
+          state = JSON.parse(JSON.stringify(DEFAULT_STATE));
         }
       } catch (e) {
-        console.warn("Could not load from localStorage", e);
+        console.warn("Could not load from storage, defaulting", e);
+        state = JSON.parse(JSON.stringify(DEFAULT_STATE));
       }
       syncStateToFormInputs();
       render();
